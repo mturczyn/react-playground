@@ -1,4 +1,12 @@
-import { Grid, Tooltip } from '@mui/material'
+import {
+    Grid,
+    TextField,
+    Tooltip,
+    Button,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+} from '@mui/material'
 import CommonButton from '../CommonButton'
 import Badge from '@mui/material/Badge'
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications'
@@ -7,14 +15,16 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 
 const validationSchema = Yup.object().shape({
-    select: Yup.string().required('Color is required!'),
+    // select: Yup.string().required('Color is required!'),
     email: Yup.string().email().required('Email is required'),
-    checkbox: Yup.bool().oneOf([true], 'Checkbox is required'),
-    radio: Yup.string().required('Radio is required!'),
+    gender: Yup.string().required('Gender is required'),
+    // checkbox: Yup.bool().oneOf([true], 'Checkbox is required'),
+    // radio: Yup.string().required('Radio is required!'),
 })
 
 export function HookForm() {
     const onSubmit = (values: any) => {
+        console.log('asdfasfd;')
         alert(JSON.stringify(values))
     }
 
@@ -25,7 +35,7 @@ export function HookForm() {
     } = useForm({
         resolver: yupResolver(validationSchema),
     })
-    console.log('errors', errors)
+
     return (
         <Grid item={true} xs={8} sx={{ marginLeft: '1rem' }}>
             <h1>
@@ -34,7 +44,7 @@ export function HookForm() {
             </h1>
 
             <div className="container">
-                <form onSubmit={handleSubmit(onSubmit)}>
+                {/* <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-row">
                         <label htmlFor="email">Email</label>
                         <input type="email" id="email" {...register('email')} />
@@ -87,6 +97,56 @@ export function HookForm() {
                         )}
                     </div>
                     <button type="submit">Sign In</button>
+                </form>
+                <h1>Using Material UI components</h1> */}
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <TextField
+                        {...register('email')}
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        error={!!errors.email}
+                        helperText={errors?.email?.message}
+                    />
+                    <RadioGroup
+                        onError={() => alert(errors.gender?.message)}
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        {...register('gender')}
+                    >
+                        <FormControlLabel
+                            onError={() => alert(errors.gender?.message)}
+                            {...register('gender')}
+                            value="female"
+                            control={<Radio />}
+                            label="Female"
+                        />
+                        <FormControlLabel
+                            onError={() => alert(errors.gender?.message)}
+                            {...register('gender')}
+                            value="male"
+                            control={<Radio />}
+                            label="Male"
+                        />
+                        <FormControlLabel
+                            onError={() => alert(errors.gender?.message)}
+                            {...register('gender')}
+                            value="other"
+                            control={<Radio />}
+                            label="Other"
+                        />
+                    </RadioGroup>
+                    <Button
+                        sx={{
+                            border: '1px dotted rgb(0, 0, 0)',
+                            backgroundColor: 'transparent',
+                            '&:hover': {
+                                backgroundColor: 'rgba(100, 100, 100, 0.5)',
+                            },
+                        }}
+                        type="submit"
+                    >
+                        Sign In
+                    </Button>
                 </form>
             </div>
         </Grid>
